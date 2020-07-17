@@ -4,14 +4,14 @@ import 'package:nemesis/teacherList/teacherClass.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nemesis/teacherList/teacherEvent.dart';
 import 'package:nemesis/teacherList/teacherState.dart';
+import 'package:filter_list/filter_list.dart';
+
+import 'countList.dart';
 
 class TeacherListWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text('Posts'),
-        ),
         body:
         BlocProvider<TeacherBloc>(
           create: (context) =>
@@ -21,6 +21,8 @@ class TeacherListWrapper extends StatelessWidget {
     );
   }
 }
+
+
 
 // Define a custom Form widget.
 class TeacherListWidget extends StatefulWidget {
@@ -50,42 +52,83 @@ class TeacherListWidgetState extends State<TeacherListWidget> {
     _teacherBloc = BlocProvider.of<TeacherBloc>(context);
   }
 
+
+  void _openFilterList() async {
+    var list = await FilterList.showFilterList(
+      context,
+      allTextList: countList,
+      height: 450,
+      borderRadius: 20,
+      headlineText: "Select Count",
+      searchFieldHintText: "Search Here",
+      selectedTextList: selectedCountList,
+    );
+
+    if (list != null) {
+      setState(() {
+        selectedCountList = List.from(list);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<TeacherBloc, TeacherState> (
-      // ignore: missing_return
-      builder: (context, state) {
-        if (state is TeacherInitial) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-        if (state is TeacherFailure) {
-          return Center(
-            child: Text('failed to fetch teachers list'),
-          );
-        }
-        if (state is TeacherSuccess) {
-          if (state.teachers.isEmpty) {
+    return Scaffold (
+      appBar: AppBar(
+        actions: <Widget>[
+          Text('學校'),
+          IconButton(
+            icon: Icon(Icons.filter_list),
+            onPressed: _openFilterList,
+          ),
+          Text('年級'),
+          IconButton(
+            icon: Icon(Icons.filter_list),
+            onPressed: _openFilterList,
+          ),
+          Text('科目'),
+          IconButton(
+            icon: Icon(Icons.filter_list),
+            onPressed: _openFilterList,
+          )
+        ],
+      ),
+      body:
+      BlocBuilder<TeacherBloc, TeacherState> (
+        // ignore: missing_return
+        builder: (context, state) {
+          if (state is TeacherInitial) {
             return Center(
-              child: Text('no result'),
+              child: CircularProgressIndicator(),
             );
           }
-          return ListView.builder(
-            scrollDirection: Axis.vertical,
-            shrinkWrap: true,
-            itemCount: state.hasReachedMax
-                ? state.teachers.length
-                : state.teachers.length + 1,
-            controller: _scrollController,
-            itemBuilder: (BuildContext context, int index) {
-            return index >= state.teachers.length
-                ? BottomLoader()
-                : makeCard(teacher: state.teachers[index]);
-            },
-          );
-        }
-      },
+          if (state is TeacherFailure) {
+            return Center(
+              child: Text('failed to fetch teachers list'),
+            );
+          }
+          if (state is TeacherSuccess) {
+            if (state.teachers.isEmpty) {
+              return Center(
+                child: Text('no result'),
+              );
+            }
+            return ListView.builder(
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+              itemCount: state.hasReachedMax
+                  ? state.teachers.length
+                  : state.teachers.length + 1,
+              controller: _scrollController,
+              itemBuilder: (BuildContext context, int index) {
+                return index >= state.teachers.length
+                    ? BottomLoader()
+                    : makeCard(teacher: state.teachers[index]);
+              },
+            );
+          }
+        },
+      ),
     );
   }
 }

@@ -70,13 +70,11 @@ class _HomeState extends State<Home> {
             elevation: 0,
           ),
           body: SizedBox.expand(
-//            child: TeacherListWidget(),
             child: PageView(
               physics: NeverScrollableScrollPhysics(),
               controller: _pageController,
               onPageChanged: (index) {
                 setState(() => _currentIndex = index);
-  //              return new TeacherListWidget();
               },
               children: _children,
             ),
