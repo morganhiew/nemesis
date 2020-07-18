@@ -3,7 +3,7 @@
 // found in the LICENSE file.
 
 import 'package:flutter/material.dart';
-import 'package:nemesis/teacherList/teacher_list_widget.dart';
+
 import 'home_widget.dart';
 
 void main() => runApp(MyApp());

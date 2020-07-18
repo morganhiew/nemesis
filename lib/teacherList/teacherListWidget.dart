@@ -1,28 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:nemesis/teacherList/teacherBloc.dart';
-import 'package:nemesis/teacherList/teacherClass.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:nemesis/teacherList/teacherEvent.dart';
-import 'package:nemesis/teacherList/teacherState.dart';
-import 'package:filter_list/filter_list.dart';
-
-import 'countList.dart';
-
-class TeacherListWrapper extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        body:
-        BlocProvider<TeacherBloc>(
-          create: (context) =>
-            TeacherBloc()..add(TeacherFetched()),
-          child: TeacherListWidget(),
-        ),
-    );
-  }
-}
-
-
+import 'package:nemesis/teacherList/teacherClass.dart';
+import 'package:nemesis/teacherList/teacherListBloc.dart';
+import 'package:nemesis/teacherList/teacherListEvent.dart';
+import 'package:nemesis/teacherList/teacherListState.dart';
 
 // Define a custom Form widget.
 class TeacherListWidget extends StatefulWidget {
@@ -52,62 +33,27 @@ class TeacherListWidgetState extends State<TeacherListWidget> {
     _teacherBloc = BlocProvider.of<TeacherBloc>(context);
   }
 
-
-  void _openFilterList() async {
-    var list = await FilterList.showFilterList(
-      context,
-      allTextList: countList,
-      height: 450,
-      borderRadius: 20,
-      headlineText: "Select Count",
-      searchFieldHintText: "Search Here",
-      selectedTextList: selectedCountList,
-    );
-
-    if (list != null) {
-      setState(() {
-        selectedCountList = List.from(list);
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold (
-      appBar: AppBar(
-        actions: <Widget>[
-          Text('學校'),
-          IconButton(
-            icon: Icon(Icons.filter_list),
-            onPressed: _openFilterList,
-          ),
-          Text('年級'),
-          IconButton(
-            icon: Icon(Icons.filter_list),
-            onPressed: _openFilterList,
-          ),
-          Text('科目'),
-          IconButton(
-            icon: Icon(Icons.filter_list),
-            onPressed: _openFilterList,
-          )
-        ],
-      ),
       body:
       BlocBuilder<TeacherBloc, TeacherState> (
         // ignore: missing_return
         builder: (context, state) {
           if (state is TeacherInitial) {
+            print('REBUILD teacherListWidget A');
             return Center(
               child: CircularProgressIndicator(),
             );
           }
           if (state is TeacherFailure) {
+            print('REBUILD teacherListWidget B');
             return Center(
               child: Text('failed to fetch teachers list'),
             );
           }
           if (state is TeacherSuccess) {
+            print('REBUILD teacherListWidget C');
             if (state.teachers.isEmpty) {
               return Center(
                 child: Text('no result'),

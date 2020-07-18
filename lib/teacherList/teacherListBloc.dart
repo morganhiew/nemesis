@@ -1,11 +1,7 @@
-import 'dart:convert';
-
 import 'package:bloc/bloc.dart';
-import 'package:meta/meta.dart';
-import 'package:http/http.dart' as http;
 import 'package:nemesis/teacherList/teacherClass.dart';
-import 'package:nemesis/teacherList/teacherEvent.dart';
-import 'package:nemesis/teacherList/teacherState.dart';
+import 'package:nemesis/teacherList/teacherListEvent.dart';
+import 'package:nemesis/teacherList/teacherListState.dart';
 
 
 class TeacherBloc extends Bloc<TeacherEvent, TeacherState> {

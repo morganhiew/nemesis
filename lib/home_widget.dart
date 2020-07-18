@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nemesis/myInfo/my_info_widget.dart';
 import 'package:nemesis/placeholder_widget.dart';
-import 'package:nemesis/teacherList/teacherBloc.dart';
-import 'package:nemesis/teacherList/teacherEvent.dart';
-import 'package:nemesis/teacherList/teacher_list_widget.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nemesis/teacherList/teacherListBloc.dart';
+import 'package:nemesis/teacherList/teacherListPage.dart';
 
 class Home extends StatefulWidget {
   @override
