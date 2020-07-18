@@ -2,22 +2,38 @@ import 'package:equatable/equatable.dart';
 
 import 'filterTeacherState.dart';
 
-abstract class FilterTeacherEvent extends Equatable {
+abstract class FilterTeacherEvent {
   @override
   List<Object> get props => [];
 }
 
-class FilterTeacherButtonPressed extends FilterTeacherEvent {
+class FilterTeacherAddButtonPressed extends FilterTeacherEvent {
   final FilterTeacherChip chip;
 
-  FilterTeacherButtonPressed(this.chip);
+  FilterTeacherAddButtonPressed(this.chip);
 
   @override
   List<Object> get props => [chip];
 
   @override
   String toString() {
-    'FilterTeacherButtonPressed { chip: $chip}';
+    'FilterTeacherAddButtonPressed { chip: $chip}';
+  }
+
+}
+
+
+class FilterTeacherDeleteButtonPressed extends FilterTeacherEvent {
+  final FilterTeacherChip chip;
+
+  FilterTeacherDeleteButtonPressed(this.chip);
+
+  @override
+  List<Object> get props => [chip];
+
+  @override
+  String toString() {
+    'FilterTeacherDeleteButtonPressed { chip: $chip}';
   }
 
 }

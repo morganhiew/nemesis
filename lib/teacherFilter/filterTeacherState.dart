@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-abstract class FilterTeacherState extends Equatable {
+abstract class FilterTeacherState {
   const FilterTeacherState();
 
   @override
@@ -9,10 +9,10 @@ abstract class FilterTeacherState extends Equatable {
 
 class FilterTeacherInitial extends FilterTeacherState {}
 
-class FilterTeacherAdded extends FilterTeacherState {
+class FilterTeacherUpdated extends FilterTeacherState {
   final List<FilterTeacherChip> filterTeacherChips;
 
-  const FilterTeacherAdded({
+  const FilterTeacherUpdated({
     this.filterTeacherChips,
   });
 
@@ -21,7 +21,7 @@ class FilterTeacherAdded extends FilterTeacherState {
 
   @override
   String toString() =>
-      'TeacherSuccess { posts: ${filterTeacherChips.length} }';
+      'FilterTeacherUpdated { posts: ${filterTeacherChips.length} }';
 }
 
 class FilterTeacherChip {
