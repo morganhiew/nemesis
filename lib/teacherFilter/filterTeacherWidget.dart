@@ -3,11 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nemesis/teacherFilter/filterTeacherEvent.dart';
-
-import 'filterTeacherBloc.dart';
-import 'filterTeacherState.dart';
-
-
+import 'package:nemesis/teacherList/teacherListBloc.dart';
+import 'package:nemesis/teacherList/teacherListEvent.dart';
+import 'package:nemesis/teacherList/teacherListState.dart';
 
 class FilterTeacherWidget extends StatefulWidget {
   @override
@@ -15,12 +13,12 @@ class FilterTeacherWidget extends StatefulWidget {
 }
 
 class FilterTeacherWidgetState extends State<FilterTeacherWidget> {
-  FilterTeacherBloc _filterTeacherBloc;
+  TeacherBloc _teacherBloc;
 
   @override
   void initState() {
     super.initState();
-    _filterTeacherBloc = BlocProvider.of<FilterTeacherBloc>(context);
+    _teacherBloc = BlocProvider.of<TeacherBloc>(context);
   }
 
   @override
@@ -55,7 +53,7 @@ class FilterTeacherWidgetState extends State<FilterTeacherWidget> {
             border: Border.all(color: Colors.greenAccent)
           ),
           child:
-            BlocBuilder<FilterTeacherBloc, FilterTeacherState>(
+            BlocBuilder<TeacherBloc, TeacherState>(
               builder: (context, state) {
                 if (state is FilterTeacherUpdated) {
                   print('REBUILD');
@@ -95,7 +93,7 @@ class FilterTeacherWidgetState extends State<FilterTeacherWidget> {
                                 onPressed: (){
                                   // ignore: unnecessary_statements
                                   print('delete ' + state.filterTeacherChips[index].label);
-                                  BlocProvider.of<FilterTeacherBloc>(context).add(
+                                  BlocProvider.of<TeacherBloc>(context).add(
                                     FilterTeacherDeleteButtonPressed(
                                         FilterTeacherChip(label: state.filterTeacherChips[index].label)
                                     ),
@@ -180,7 +178,7 @@ void _showYearBottomSheet(context){
                         print(selectedIndex);
                         print(educationLevel[selectedIndex].data);
                         Navigator.of(context).pop();
-                        BlocProvider.of<FilterTeacherBloc>(context).add(
+                        BlocProvider.of<TeacherBloc>(context).add(
                             FilterTeacherAddButtonPressed(
                                 FilterTeacherChip(label: educationLevel[selectedIndex].data,
                                     description: educationLevel[selectedIndex].data)

@@ -38,3 +38,27 @@ class TeacherSuccess extends TeacherState {
   String toString() =>
       'TeacherSuccess { posts: ${teachers.length}, hasReachedMax: $hasReachedMax }';
 }
+
+class FilterTeacherInitial extends TeacherState {}
+
+class FilterTeacherUpdated extends TeacherState {
+  final List<FilterTeacherChip> filterTeacherChips;
+
+  const FilterTeacherUpdated({
+    this.filterTeacherChips,
+  });
+
+  @override
+  List<Object> get props => [filterTeacherChips];
+
+  @override
+  String toString() =>
+      'FilterTeacherUpdated { posts: ${filterTeacherChips.length} }';
+}
+
+class FilterTeacherChip {
+  final String label;
+  final String description;
+
+  const FilterTeacherChip ({this.label, this.description});
+}

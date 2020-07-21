@@ -10,27 +10,43 @@ import '../teacherFilter/filterTeacherWidget.dart';
 class TeacherListWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        children: <Widget>[
-          Container(
-            child:
-              BlocProvider<FilterTeacherBloc>(
-                create: (context) =>
-                FilterTeacherBloc(),
-                child: FilterTeacherWidget(),
-              ),
-          ),
-          Expanded(
-            child:
-              BlocProvider<TeacherBloc>(
-                create: (context) =>
-                TeacherBloc()..add(TeacherFetched()),
-                child: TeacherListWidget(),
-              ),
-          )
-        ],
+    return BlocProvider<TeacherBloc>(
+      create: (context) => TeacherBloc()..add(TeacherFetched()),
+      child: Container(
+        child: Column(
+          children: <Widget>[
+            Container(
+              child: FilterTeacherWidget()
+            ),
+            Expanded(
+              child: TeacherListWidget()
+                ),
+          ],
+        ),
       ),
+
     );
+//    Container(
+//      child: Column(
+//        children: <Widget>[
+//          Container(
+//            child:
+//              BlocProvider<FilterTeacherBloc>(
+//                create: (context) =>
+//                FilterTeacherBloc(),
+//                child: FilterTeacherWidget(),
+//              ),
+//          ),
+//          Expanded(
+//            child:
+//              BlocProvider<TeacherBloc>(
+//                create: (context) =>
+//                TeacherBloc()..add(TeacherFetched()),
+//                child: TeacherListWidget(),
+//              ),
+//          )
+//        ],
+//      ),
+//    );
   }
 }
