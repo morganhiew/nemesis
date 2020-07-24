@@ -6,26 +6,58 @@ import 'package:nemesis/teacherList/teacherListState.dart';
 
 class TeacherBloc extends Bloc<TeacherEvent, TeacherState> {
 
-  TeacherBloc() : super(TeacherInitial());
+  TeacherBloc() : super(TeacherInitial(filterTeacherChips: null));
 
   @override
   Stream<TeacherState> mapEventToState(TeacherEvent event) async* {
     print('bloc called');
+    event = event;
     final currentState = state;
+    List<FilterTeacherChip> currentChip = state.filterTeacherChips;
+
+    // original bloc for teacher filter
+    if (event is FilterTeacherAddButtonPressed) {
+      try {
+        FilterTeacherChip selectedChip;
+        if (event is FilterTeacherAddButtonPressed) {
+          selectedChip = event.chip;
+        }
+        if (currentChip == null) {
+          currentChip = [selectedChip];
+        } else {
+          currentChip.add(selectedChip);
+        }
+        print('filter teacher added');
+        print('length: ' + currentChip.length.toString());
+      } catch (_) {
+      }
+    }
+    else if (event is FilterTeacherDeleteButtonPressed) {
+        List<FilterTeacherChip> newChipList = new List();
+        print('chip label: ' + event.chip.label);
+        for (var i = 0; i < currentState.filterTeacherChips.length; i++) {
+          print('iterating list: ' + currentChip[i].label.toString());
+          if (event.chip.label != currentChip[i].label.toString()) {
+            newChipList.add(currentChip[i]);
+          }
+        }
+        print('filter teacher updated');
+        currentChip = newChipList;
+    }
+
     if (event is TeacherFetched && !_hasReachedMax(currentState)) {
       try {
         if (currentState is TeacherInitial) {
           print('teacher bloc initial');
           final teachers = _fetchPosts(0, 6);
-          yield TeacherSuccess(teachers: teachers, hasReachedMax: false);
-          return;
+          yield TeacherSuccess(filterTeacherChips: currentChip, teachers: teachers, hasReachedMax: false);
         }
-        if (currentState is TeacherSuccess) {
+        else if (currentState is TeacherSuccess) {
           final posts =
           _fetchPosts(currentState.teachers.length, 6);
           yield posts.isEmpty
               ? currentState.copyWith(hasReachedMax: true)
-              : TeacherSuccess(
+              : TeacherSuccess(filterTeacherChips: currentChip,
             teachers: currentState.teachers + posts,
             hasReachedMax: false,
           );
@@ -33,49 +65,16 @@ class TeacherBloc extends Bloc<TeacherEvent, TeacherState> {
       } catch (_) {
         yield TeacherFailure();
       }
-    }
-
-    // original bloc for teacher filter
-    if (event is FilterTeacherAddButtonPressed) {
+    } else if ((event is FilterTeacherAddButtonPressed || event is FilterTeacherDeleteButtonPressed)
+        && !_hasReachedMax(currentState)) {
       try {
-        if (currentState is TeacherInitial) {
-          final List<FilterTeacherChip> chips = [event.chip];
-          print('filter teacher initial');
-          print(event.chip.label +  event.chip.description);
-          final teachers = _fetchPosts(0, 6);
-//          yield TeacherSuccess(teachers: teachers, hasReachedMax: false);
-          yield FilterTeacherUpdated(filterTeacherChips: chips, teachers: teachers, hasReachedMax: false);
-          return;
-        }
-        if (currentState is FilterTeacherUpdated) {
-          currentState.filterTeacherChips.add(event.chip);
-          final chips = currentState.filterTeacherChips;
-          print('filter teacher added');
-          print('length: ' + chips.length.toString());
-          final teachers = _fetchPosts(0, 6);
-//          yield TeacherSuccess(teachers: teachers, hasReachedMax: false);
-          yield FilterTeacherUpdated(filterTeacherChips: chips, teachers: teachers, hasReachedMax: false);
-        }
-      } catch (_) {
-      }
-    }
-    else if (event is FilterTeacherDeleteButtonPressed) {
-      if (currentState is FilterTeacherUpdated) {
-        List<FilterTeacherChip> newChipList = new List();
-        print('chip label: ' + event.chip.label);
-        for (var i = 0; i < currentState.filterTeacherChips.length; i++) {
-          print('iterating list: ' + currentState.filterTeacherChips[i].label.toString());
-          if (event.chip.label != currentState.filterTeacherChips[i].label.toString()) {
-            newChipList.add(currentState.filterTeacherChips[i]);
-          }
-        }
-        print('filter teacher updated');
+        print('teacher bloc initial');
         final teachers = _fetchPosts(0, 6);
-//        yield TeacherSuccess(teachers: teachers, hasReachedMax: false);
-        yield FilterTeacherUpdated(filterTeacherChips: newChipList, teachers: teachers, hasReachedMax: false);
+        yield TeacherSuccess(filterTeacherChips: currentChip, teachers: teachers, hasReachedMax: false);
+      } catch (_) {
+        yield TeacherFailure();
       }
     }
-
 
   }
 

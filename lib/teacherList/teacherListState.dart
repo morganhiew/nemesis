@@ -1,25 +1,27 @@
 import 'package:equatable/equatable.dart';
 import 'package:nemesis/teacherList/teacherClass.dart';
 
-abstract class TeacherState {
-  const TeacherState();
+class TeacherState {
+  final List<FilterTeacherChip> filterTeacherChips;
+  const TeacherState(this.filterTeacherChips);
 
   @override
   List<Object> get props => [];
 }
 
-class TeacherInitial extends TeacherState {}
+class TeacherInitial extends TeacherState {
+  TeacherInitial({List<FilterTeacherChip> filterTeacherChips}) : super(filterTeacherChips);
+}
 
-class TeacherFailure extends TeacherState {}
+class TeacherFailure extends TeacherState {
+  TeacherFailure({List<FilterTeacherChip> filterTeacherChips}) : super(filterTeacherChips);
+}
 
 class TeacherSuccess extends TeacherState {
   final List<Teacher> teachers;
   final bool hasReachedMax;
 
-  const TeacherSuccess({
-    this.teachers,
-    this.hasReachedMax,
-  });
+  TeacherSuccess({List<FilterTeacherChip> filterTeacherChips, this.teachers, this.hasReachedMax}) : super(filterTeacherChips);
 
   TeacherSuccess copyWith({
     List<Teacher> teachers,
@@ -39,25 +41,6 @@ class TeacherSuccess extends TeacherState {
       'TeacherSuccess { posts: ${teachers.length}, hasReachedMax: $hasReachedMax }';
 }
 
-class FilterTeacherInitial extends TeacherState {}
-
-class FilterTeacherUpdated extends TeacherState {
-  final List<Teacher> teachers;
-  final bool hasReachedMax;
-  final List<FilterTeacherChip> filterTeacherChips;
-
-  const FilterTeacherUpdated({
-    this.filterTeacherChips,
-    this.teachers, this.hasReachedMax
-  });
-
-  @override
-  List<Object> get props => [filterTeacherChips];
-
-  @override
-  String toString() =>
-      'FilterTeacherUpdated { posts: ${filterTeacherChips.length} }';
-}
 
 class FilterTeacherChip {
   final String label;

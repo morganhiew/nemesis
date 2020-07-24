@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:nemesis/teacherFilter/filterTeacherEvent.dart';
 import 'package:nemesis/teacherList/teacherListBloc.dart';
 import 'package:nemesis/teacherList/teacherListEvent.dart';
 import 'package:nemesis/teacherList/teacherListState.dart';
@@ -42,7 +41,7 @@ Widget FilterTeacherWidget(BuildContext context) {
           BlocBuilder<TeacherBloc, TeacherState>(
             bloc: _teacherBlocInstance,
             builder: (context, state) {
-              if (state is FilterTeacherUpdated) {
+              if (state is TeacherSuccess) {
                 print('REBUILD');
                 ScrollController jumpController = ScrollController();
                 SchedulerBinding.instance.addPostFrameCallback((_) {

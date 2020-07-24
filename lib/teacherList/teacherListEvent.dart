@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:nemesis/teacherList/teacherListState.dart';
 
-abstract class TeacherEvent extends Equatable {
+abstract class TeacherEvent {
   @override
   List<Object> get props => [];
 }
