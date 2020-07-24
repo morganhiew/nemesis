@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:nemesis/teacherList/teacherClass.dart';
 
-abstract class TeacherState extends Equatable {
+abstract class TeacherState {
   const TeacherState();
 
   @override
@@ -42,10 +42,13 @@ class TeacherSuccess extends TeacherState {
 class FilterTeacherInitial extends TeacherState {}
 
 class FilterTeacherUpdated extends TeacherState {
+  final List<Teacher> teachers;
+  final bool hasReachedMax;
   final List<FilterTeacherChip> filterTeacherChips;
 
   const FilterTeacherUpdated({
     this.filterTeacherChips,
+    this.teachers, this.hasReachedMax
   });
 
   @override

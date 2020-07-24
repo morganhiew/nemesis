@@ -7,124 +7,116 @@ import 'package:nemesis/teacherList/teacherListBloc.dart';
 import 'package:nemesis/teacherList/teacherListEvent.dart';
 import 'package:nemesis/teacherList/teacherListState.dart';
 
-class FilterTeacherWidget extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() => FilterTeacherWidgetState();
-}
-
-class FilterTeacherWidgetState extends State<FilterTeacherWidget> {
-  TeacherBloc _teacherBloc;
-
-  @override
-  void initState() {
-    super.initState();
-    _teacherBloc = BlocProvider.of<TeacherBloc>(context);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Row(
-          children: <Widget>[
-            RaisedButton(
-              child: Text("年級"),
-              onPressed: (){
-                  _showYearBottomSheet(context);
-                },
-            ),
-            RaisedButton(
-              child: Text("科目"),
-              onPressed: (){
-                _showSubjectBottomSheet(context);
-              },
-            ),
-            RaisedButton(
-              child: Text("地區"),
-              onPressed: (){
-                _showAreaBottomSheet(context);
-              },
-            ),
-          ],
-        ),
-        Container(
+Widget FilterTeacherWidget(BuildContext context) {
+  final _teacherBlocInstance = BlocProvider.of<TeacherBloc>(context);
+  return Column(
+    children: <Widget>[
+      Row(
+        children: <Widget>[
+          RaisedButton(
+            child: Text("年級"),
+            onPressed: () {
+              _showYearBottomSheet(context);
+            },
+          ),
+          RaisedButton(
+            child: Text("科目"),
+            onPressed: () {
+              _showSubjectBottomSheet(context);
+            },
+          ),
+          RaisedButton(
+            child: Text("地區"),
+            onPressed: () {
+              _showAreaBottomSheet(context);
+            },
+          ),
+        ],
+      ),
+      Container(
           height: 40,
           decoration: BoxDecoration(
-            border: Border.all(color: Colors.greenAccent)
+              border: Border.all(color: Colors.greenAccent)
           ),
           child:
-            BlocBuilder<TeacherBloc, TeacherState>(
-              builder: (context, state) {
-                if (state is FilterTeacherUpdated) {
-                  print('REBUILD');
-                  ScrollController jumpController = ScrollController();
-                  SchedulerBinding.instance.addPostFrameCallback((_) {
-                    jumpController.jumpTo(jumpController.position.maxScrollExtent);
-                  });
-                  return ListView.builder(
-                    controller: jumpController,
-                    scrollDirection: Axis.horizontal,
-                    itemCount: state.filterTeacherChips.length,
-                    itemBuilder: (context, index) {
-                      return Stack(
-                        children: <Widget>[
-                          Container(
-                            height: 30,
-                            width: 50,
-                            margin: const EdgeInsets.all(5.0),
-                            padding: const EdgeInsets.all(5.0),
-                            decoration: BoxDecoration(
-                                color: Colors.orangeAccent,
-                                borderRadius: BorderRadius.all(Radius.circular(20))
-                            ),
-                            child: Align(
-                              alignment: Alignment.center,
-                              child: Text(state.filterTeacherChips[index].label, textAlign: TextAlign.center,),
-                            ),
+          BlocBuilder<TeacherBloc, TeacherState>(
+            bloc: _teacherBlocInstance,
+            builder: (context, state) {
+              if (state is FilterTeacherUpdated) {
+                print('REBUILD');
+                ScrollController jumpController = ScrollController();
+                SchedulerBinding.instance.addPostFrameCallback((_) {
+                  jumpController.jumpTo(
+                      jumpController.position.maxScrollExtent);
+                });
+                return ListView.builder(
+                  controller: jumpController,
+                  scrollDirection: Axis.horizontal,
+                  itemCount: state.filterTeacherChips.length,
+                  itemBuilder: (context, index) {
+                    return Stack(
+                      children: <Widget>[
+                        Container(
+                          height: 30,
+                          width: 50,
+                          margin: const EdgeInsets.all(5.0),
+                          padding: const EdgeInsets.all(5.0),
+                          decoration: BoxDecoration(
+                              color: Colors.orangeAccent,
+                              borderRadius: BorderRadius.all(
+                                  Radius.circular(20))
                           ),
-                          Positioned(
+                          child: Align(
+                            alignment: Alignment.center,
+                            child: Text(state.filterTeacherChips[index].label,
+                              textAlign: TextAlign.center,),
+                          ),
+                        ),
+                        Positioned(
                             top: 0.0,
                             right: 0.0,
                             child: SizedBox(
                               width: 18,
                               height: 18,
                               child: FloatingActionButton(
-                                child: Icon(Icons.close, color: Colors.black, size: 18,),
-                                onPressed: (){
+                                child: Icon(
+                                  Icons.close, color: Colors.black, size: 18,),
+                                onPressed: () {
                                   // ignore: unnecessary_statements
-                                  print('delete ' + state.filterTeacherChips[index].label);
-                                  BlocProvider.of<TeacherBloc>(context).add(
+                                  print('delete ' +
+                                      state.filterTeacherChips[index].label);
+                                  _teacherBlocInstance.add(
                                     FilterTeacherDeleteButtonPressed(
-                                        FilterTeacherChip(label: state.filterTeacherChips[index].label)
+                                        FilterTeacherChip(label: state
+                                            .filterTeacherChips[index].label)
                                     ),
                                   );
                                 },
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(80)),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(80)),
                                 backgroundColor: Colors.white,
 
                                 mini: true,
                               ),
                             )
-                          )
-                        ],
-                      );
-
-                    },
-                  );
-                }
-                else {
-                  return Container();
-                }
-              },
-            )
-
+                        )
+                      ],
+                    );
+                  },
+                );
+              }
+              else {
+                return Container();
+              }
+            },
+          )
 
 
-        )
-      ],
-    );
-  }
+      )
+    ],
+  );
 }
+
 
 void _showYearBottomSheet(context){
   int selectedIndex = 0;

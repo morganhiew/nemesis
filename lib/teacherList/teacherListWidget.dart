@@ -6,36 +6,20 @@ import 'package:nemesis/teacherList/teacherListEvent.dart';
 import 'package:nemesis/teacherList/teacherListState.dart';
 
 // Define a custom Form widget.
-class TeacherListWidget extends StatefulWidget {
-  @override
-  TeacherListWidgetState createState() => TeacherListWidgetState();
-}
-
-// Define a corresponding State class.
-// This class holds data related to the form.
-class TeacherListWidgetState extends State<TeacherListWidget> {
+Widget TeacherListWidget(context) {
   final _scrollController = ScrollController();
   final _scrollThreshold = 200.0;
-  TeacherBloc _teacherBloc;
+//  TeacherBloc _teacherBloc;
 
   void _onScroll() {
     final maxScroll = _scrollController.position.maxScrollExtent;
     final currentScroll = _scrollController.position.pixels;
     if (maxScroll - currentScroll <= _scrollThreshold) {
-      _teacherBloc.add(TeacherFetched());
+      BlocProvider.of<TeacherBloc>(context).add(TeacherFetched());
     }
   }
 
-  @override
-  void initState() {
-    super.initState();
-    _scrollController.addListener(_onScroll);
-    _teacherBloc = BlocProvider.of<TeacherBloc>(context);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold (
+  return Scaffold (
       body:
       BlocBuilder<TeacherBloc, TeacherState> (
         // ignore: missing_return
@@ -77,7 +61,7 @@ class TeacherListWidgetState extends State<TeacherListWidget> {
       ),
     );
   }
-}
+
 
 
 

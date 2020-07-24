@@ -10,16 +10,17 @@ import '../teacherFilter/filterTeacherWidget.dart';
 class TeacherListWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final teacherBloc = TeacherBloc();
     return BlocProvider<TeacherBloc>(
       create: (context) => TeacherBloc()..add(TeacherFetched()),
       child: Container(
         child: Column(
           children: <Widget>[
             Container(
-              child: FilterTeacherWidget()
+              child: FilterTeacherWidget(context)
             ),
             Expanded(
-              child: TeacherListWidget()
+              child: TeacherListWidget(context)
                 ),
           ],
         ),
