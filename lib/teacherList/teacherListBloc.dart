@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:nemesis/teacherList/teacherClass.dart';
 import 'package:nemesis/teacherList/teacherListEvent.dart';
 import 'package:nemesis/teacherList/teacherListState.dart';
@@ -83,6 +84,34 @@ class TeacherBloc extends Bloc<TeacherEvent, TeacherState> {
       state is TeacherSuccess && state.hasReachedMax;
 
   _fetchPosts(int startIndex, int limit) async {
+    await new Future.delayed(const Duration(seconds : 1));
+    print('fetch from firebase');
+    print(startIndex);
+    print(startIndex + limit);
+    CollectionReference ref = Firestore.instance.collection('teachers');
+    List<Teacher> resList = [];
+    if (startIndex + limit > 7) {
+      var res = ref.orderBy('name').startAt([startIndex]).endAt([7]).getDocuments();
+      print(res);
+      return res;
+    } else {
+      var res = await ref
+          .orderBy('name')
+          .limit(limit)
+//          .limit(7)
+          .getDocuments().then((querySnapshot){
+            querySnapshot.documents.forEach((result) {
+              print('RESULT!');
+              print(result.data);
+              resList.add(Teacher(name: result.data['name'], description: result.data['description']));
+            });
+      });
+      print(resList);
+      return res;
+    }
+  }
+
+  _fetchPostsDummy(int startIndex, int limit) async {
     final List<Teacher> teachersList = [
       Teacher(name:'1', description:'hi', liked: true),
       Teacher(name:'2', description: 'hiiii', liked: false),
