@@ -8,7 +8,7 @@ import 'package:nemesis/teacherList/teacherListState.dart';
 
 class TeacherBloc extends Bloc<TeacherEvent, TeacherState> {
 
-  TeacherBloc() : super(TeacherInitial(filterTeacherChips: null));
+  TeacherBloc() : super(TeacherInitial(filterTeacherChips: []));
 
   @override
   Stream<TeacherState> mapEventToState(TeacherEvent event) async* {
@@ -104,8 +104,8 @@ class TeacherBloc extends Bloc<TeacherEvent, TeacherState> {
     await new Future.delayed(const Duration(seconds : 1));
     print(startIndex);
     print(startIndex + limit);
-    if (startIndex + limit > 15) {
-      return teachersList.sublist(startIndex, 15);
+    if (startIndex + limit > 16) {
+      return teachersList.sublist(startIndex, 16);
     } else {
       return teachersList.sublist(startIndex, startIndex + limit);
     }
@@ -137,8 +137,8 @@ class TeacherBloc extends Bloc<TeacherEvent, TeacherState> {
     await new Future.delayed(const Duration(seconds : 1));
     print(startIndex);
     print(startIndex + limit);
-    if (startIndex + limit > 15) {
-      return teachersList.sublist(startIndex, 15);
+    if (startIndex + limit > 20) {
+      return teachersList.sublist(startIndex, 20);
     } else {
       return teachersList.sublist(startIndex, startIndex + limit);
     }
