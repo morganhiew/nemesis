@@ -11,7 +11,7 @@ class TeacherListWrapper extends StatelessWidget {
   Widget build(BuildContext context) {
 //    final teacherBloc = TeacherBloc();
     return BlocProvider<TeacherBloc>(
-      create: (context) => TeacherBloc()..add(TeacherFetched()),
+      create: (context) => TeacherBloc(),
       child: Container(
         child: Column(
           children: <Widget>[

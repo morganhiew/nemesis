@@ -11,18 +11,21 @@ Widget TeacherListWidget(context) {
   final _scrollThreshold = 200.0;
   final _teacherBlocInstance = BlocProvider.of<TeacherBloc>(context);
 
+
   void _onScroll() {
     final maxScroll = _scrollController.position.maxScrollExtent;
     final currentScroll = _scrollController.position.pixels;
     if (maxScroll - currentScroll <= _scrollThreshold) {
-      BlocProvider.of<TeacherBloc>(context).add(TeacherFetched());
+      _teacherBlocInstance.add(TeacherFetched());
     }
   }
+
+  _scrollController.addListener(_onScroll);
 
   return Scaffold (
       body:
       BlocBuilder<TeacherBloc, TeacherState> (
-        bloc: _teacherBlocInstance,
+        bloc: _teacherBlocInstance..add(TeacherFetched()),
         // ignore: missing_return
         builder: (context, state) {
           if (state is TeacherInitial) {

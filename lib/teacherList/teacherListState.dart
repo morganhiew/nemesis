@@ -28,6 +28,7 @@ class TeacherSuccess extends TeacherState {
     bool hasReachedMax,
   }) {
     return TeacherSuccess(
+      filterTeacherChips: this.filterTeacherChips,
       teachers: teachers ?? this.teachers,
       hasReachedMax: hasReachedMax ?? this.hasReachedMax,
     );

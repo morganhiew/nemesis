@@ -41,6 +41,8 @@ Widget FilterTeacherWidget(BuildContext context) {
           BlocBuilder<TeacherBloc, TeacherState>(
             bloc: _teacherBlocInstance,
             builder: (context, state) {
+              int _itemCount = state.filterTeacherChips != null ? state.filterTeacherChips.length : 0;
+              print('_itemcount ' + _itemCount.toString());
               if (state is TeacherSuccess) {
                 print('REBUILD');
                 ScrollController jumpController = ScrollController();
@@ -51,7 +53,7 @@ Widget FilterTeacherWidget(BuildContext context) {
                 return ListView.builder(
                   controller: jumpController,
                   scrollDirection: Axis.horizontal,
-                  itemCount: state.filterTeacherChips.length,
+                  itemCount: _itemCount,
                   itemBuilder: (context, index) {
                     return Stack(
                       children: <Widget>[
