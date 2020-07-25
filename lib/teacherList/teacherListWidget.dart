@@ -9,7 +9,7 @@ import 'package:nemesis/teacherList/teacherListState.dart';
 Widget TeacherListWidget(context) {
   final _scrollController = ScrollController();
   final _scrollThreshold = 200.0;
-//  TeacherBloc _teacherBloc;
+  final _teacherBlocInstance = BlocProvider.of<TeacherBloc>(context);
 
   void _onScroll() {
     final maxScroll = _scrollController.position.maxScrollExtent;
@@ -22,6 +22,7 @@ Widget TeacherListWidget(context) {
   return Scaffold (
       body:
       BlocBuilder<TeacherBloc, TeacherState> (
+        bloc: _teacherBlocInstance,
         // ignore: missing_return
         builder: (context, state) {
           if (state is TeacherInitial) {

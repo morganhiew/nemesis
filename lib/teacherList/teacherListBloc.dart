@@ -69,7 +69,7 @@ class TeacherBloc extends Bloc<TeacherEvent, TeacherState> {
         && !_hasReachedMax(currentState)) {
       try {
         print('teacher bloc initial');
-        final teachers = _fetchPosts(0, 6);
+        final teachers = _fetchPostsB(0, 6);
         yield TeacherSuccess(filterTeacherChips: currentChip, teachers: teachers, hasReachedMax: false);
       } catch (_) {
         yield TeacherFailure();
@@ -109,6 +109,32 @@ class TeacherBloc extends Bloc<TeacherEvent, TeacherState> {
     }
   }
 
-
+  _fetchPostsB(int startIndex, int limit) {
+    final List<Teacher> teachersList = [
+      Teacher(name:'A', description:'hi', liked: true),
+      Teacher(name:'A', description: 'hiiii', liked: false),
+      Teacher(name:'A', description: 'hihihi', liked: true),
+      Teacher(name:'A', description: 'hihi', liked: true),
+      Teacher(name:'A', description: 'hiiiii', liked: false),
+      Teacher(name:'A', description: 'hiiih', liked: false),
+      Teacher(name:'A', description: 'mu', liked: true),
+      Teacher(name:'A', description: 'afe', liked: true),
+      Teacher(name:'A', description: 'seaef', liked: false),
+      Teacher(name:'10', description:  'seffe', liked: true),
+      Teacher(name:'11', description:  'saeffe', liked: false),
+      Teacher(name:'12', description: 'afe', liked: true),
+      Teacher(name:'13', description: 'seaef', liked: false),
+      Teacher(name:'14', description:  'see', liked: true),
+      Teacher(name:'15', description:  'saeffe', liked: false),
+      Teacher(name:'16', description:  'xxx', liked: false),
+    ];
+    print(startIndex);
+    print(startIndex + limit);
+    if (startIndex + limit > 15) {
+      return teachersList.sublist(startIndex, 15);
+    } else {
+      return teachersList.sublist(startIndex, startIndex + limit);
+    }
+  }
 
 }
