@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:nemesis/teacherList/teacherClass.dart';
 
@@ -20,9 +21,9 @@ class TeacherFailure extends TeacherState {
 class TeacherSuccess extends TeacherState {
   final List<Teacher> teachers;
   final bool hasReachedMax;
-  final String lastId;
+  final DocumentSnapshot lastDoc;
 
-  TeacherSuccess({List<FilterTeacherChip> filterTeacherChips, this.teachers, this.hasReachedMax, this.lastId}) : super(filterTeacherChips);
+  TeacherSuccess({List<FilterTeacherChip> filterTeacherChips, this.teachers, this.hasReachedMax, this.lastDoc}) : super(filterTeacherChips);
 
   TeacherSuccess copyWith({
     List<Teacher> teachers,
@@ -32,7 +33,7 @@ class TeacherSuccess extends TeacherState {
       filterTeacherChips: this.filterTeacherChips,
       teachers: teachers ?? this.teachers,
       hasReachedMax: hasReachedMax ?? this.hasReachedMax,
-      lastId: lastId ?? this.lastId
+      lastDoc: lastDoc ?? this.lastDoc,
     );
   }
 
