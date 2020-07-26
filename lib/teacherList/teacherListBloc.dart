@@ -15,7 +15,7 @@ class TeacherBloc extends Bloc<TeacherEvent, TeacherState> {
   Stream<TeacherState> mapEventToState(TeacherEvent event) async* {
     print('bloc called');
     final currentState = state;
-    List<FilterTeacherChip> currentChip = state.filterTeacherChips;
+    List<FilterTeacherChip> currentChips = state.filterTeacherChips;
 
     // original bloc for teacher filter
     if (event is FilterTeacherAddButtonPressed) {
@@ -24,13 +24,13 @@ class TeacherBloc extends Bloc<TeacherEvent, TeacherState> {
         if (event is FilterTeacherAddButtonPressed) {
           selectedChip = event.chip;
         }
-        if (currentChip == null) {
-          currentChip = [selectedChip];
+        if (currentChips == null) {
+          currentChips = [selectedChip];
         } else {
-          currentChip.add(selectedChip);
+          currentChips.add(selectedChip);
         }
         print('filter teacher added');
-        print('length: ' + currentChip.length.toString());
+        print('length: ' + currentChips.length.toString());
       } catch (_) {
       }
     }
@@ -38,77 +38,101 @@ class TeacherBloc extends Bloc<TeacherEvent, TeacherState> {
         List<FilterTeacherChip> newChipList = new List();
         print('chip label: ' + event.chip.label);
         for (var i = 0; i < currentState.filterTeacherChips.length; i++) {
-          print('iterating list: ' + currentChip[i].label.toString());
-          if (event.chip.label != currentChip[i].label.toString()) {
-            newChipList.add(currentChip[i]);
+          print('iterating list: ' + currentChips[i].label.toString());
+          if (event.chip.label != currentChips[i].label.toString()) {
+            newChipList.add(currentChips[i]);
           }
         }
         print('filter teacher updated');
-        currentChip = newChipList;
+        currentChips = newChipList;
     }
 
-    if (event is TeacherFetched && !_hasReachedMax(currentState)) {
+    if (event is TeacherFetched && !_hasReachedMax(currentState)
+        && !(event is FilterTeacherAddButtonPressed || event is FilterTeacherDeleteButtonPressed)) {
       try {
         if (currentState is TeacherInitial) {
           print('teacher bloc initial');
-          final teachers = await _fetchPosts(0, 6);
-          yield TeacherSuccess(filterTeacherChips: currentChip, teachers: teachers, hasReachedMax: false);
+          final result = await _fetchPosts(null, 6, currentChips);
+          final lastId = result[0];
+          final teachers = result[1];
+          yield TeacherSuccess(filterTeacherChips: currentChips, teachers: teachers, lastId: lastId, hasReachedMax: false);
         }
         else if (currentState is TeacherSuccess) {
-          final posts = state.filterTeacherChips.length > 0 ?
-          await _fetchPostsB(currentState.teachers.length, 6): await _fetchPosts(currentState.teachers.length, 6);
-          yield posts.isEmpty
+          final result = await _fetchPosts(currentState.lastId, 6, currentChips);
+          final lastId = result[0];
+          final posts = result[1];
+          yield lastId == currentState.lastId
               ? currentState.copyWith(hasReachedMax: true)
-              : TeacherSuccess(filterTeacherChips: currentChip,
+              : TeacherSuccess(filterTeacherChips: currentChips,
             teachers: currentState.teachers + posts,
+            lastId: lastId,
             hasReachedMax: false,
           );
         }
-      } catch (_) {
+      } catch (e) {
+        print('ERROR!!!!!!!!!');
+        print(e.toString());
         yield TeacherFailure();
       }
     } else if ((event is FilterTeacherAddButtonPressed || event is FilterTeacherDeleteButtonPressed)) {
       try {
         print('teacher bloc re initialise');
         yield TeacherInitial();
-        final teachers = await _fetchPostsB(0, 6);
-        yield TeacherSuccess(filterTeacherChips: currentChip, teachers: teachers, hasReachedMax: false);
-      } catch (_) {
+        final result = await _fetchPosts(null, 6, currentChips);
+        final lastId = result[0];
+        final teachers = result[1];
+        yield TeacherSuccess(filterTeacherChips: currentChips, teachers: teachers, hasReachedMax: false, lastId: lastId);
+      } catch (e) {
+        print('ERROR!!!!!!!!!');
+        print(e.toString());
         yield TeacherFailure();
       }
     }
-
   }
 
   bool _hasReachedMax(TeacherState state) =>
       state is TeacherSuccess && state.hasReachedMax;
 
-  _fetchPosts(int startIndex, int limit) async {
-    await new Future.delayed(const Duration(seconds : 1));
+  _fetchPosts(String lastId, int limit, List<FilterTeacherChip> currentChips) async {
     print('fetch from firebase');
-    print(startIndex);
-    print(startIndex + limit);
+    print(lastId);
+    print(limit);
+    List<String> currentChipLabels = [];
+    if (currentChips != null) currentChipLabels = currentChips.map((f) => f.label).toList();
+    print(currentChipLabels);
     CollectionReference ref = Firestore.instance.collection('teachers');
     List<Teacher> resList = [];
-    if (startIndex + limit > 7) {
-      var res = ref.orderBy('name').startAt([startIndex]).endAt([7]).getDocuments();
-      print(res);
-      return res;
+    String resLastId;
+    if (currentChipLabels.length > 0) {
+      var res = await ref
+          .where('subjects', arrayContainsAny: currentChipLabels)
+          .orderBy('name')
+          .limit(limit)
+          .startAfter([lastId])
+          .getDocuments().then((querySnapshot){
+            querySnapshot.documents.forEach((result) {
+            print('RESULT!');
+            print(result.documentID);
+          resLastId = result.documentID;
+            print(result.data);
+          resList.add(Teacher(id: result.documentID, name: result.data['name'], description: result.data['description'], liked: false));
+        });
+      });
     } else {
       var res = await ref
           .orderBy('name')
           .limit(limit)
-//          .limit(7)
+          .startAfter([lastId])
           .getDocuments().then((querySnapshot){
             querySnapshot.documents.forEach((result) {
-              print('RESULT!');
-              print(result.data);
-              resList.add(Teacher(name: result.data['name'], description: result.data['description']));
-            });
+          resLastId = result.documentID;
+          resList.add(Teacher(id: result.documentID, name: result.data['name'], description: result.data['description'], liked: false));
+        });
       });
-      print(resList);
-      return res;
     }
+      print(resList);
+    return [resLastId, resList];
+
   }
 
   _fetchPostsDummy(int startIndex, int limit) async {

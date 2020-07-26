@@ -2,14 +2,16 @@ import 'package:equatable/equatable.dart';
 
 // ignore: must_be_immutable
 class Teacher extends Equatable {
+  final String id;
   final String name;
   final String description;
   final bool liked;
+  final List<int> subjects;
 
-  const Teacher ({this.name, this.description, this.liked});
+  const Teacher ({this.id, this.name, this.description, this.liked, this.subjects});
 
   @override
-  List<Object> get props => [name, description, liked];
+  List<Object> get props => [id, name, description, liked];
 
 }
 

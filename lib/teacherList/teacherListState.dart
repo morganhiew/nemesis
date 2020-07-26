@@ -20,8 +20,9 @@ class TeacherFailure extends TeacherState {
 class TeacherSuccess extends TeacherState {
   final List<Teacher> teachers;
   final bool hasReachedMax;
+  final String lastId;
 
-  TeacherSuccess({List<FilterTeacherChip> filterTeacherChips, this.teachers, this.hasReachedMax}) : super(filterTeacherChips);
+  TeacherSuccess({List<FilterTeacherChip> filterTeacherChips, this.teachers, this.hasReachedMax, this.lastId}) : super(filterTeacherChips);
 
   TeacherSuccess copyWith({
     List<Teacher> teachers,
@@ -31,6 +32,7 @@ class TeacherSuccess extends TeacherState {
       filterTeacherChips: this.filterTeacherChips,
       teachers: teachers ?? this.teachers,
       hasReachedMax: hasReachedMax ?? this.hasReachedMax,
+      lastId: lastId ?? this.lastId
     );
   }
 

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nemesis/teacherList/teacherFilter/filterTeacherWidget.dart';
 import 'package:nemesis/teacherList/teacherListBloc.dart';
 import 'package:nemesis/teacherList/teacherListEvent.dart';
 import 'package:nemesis/teacherList/teacherListWidget.dart';
 
-import '../teacherFilter/filterTeacherWidget.dart';
 
 class TeacherListWrapper extends StatelessWidget {
   @override

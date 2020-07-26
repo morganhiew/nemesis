@@ -204,21 +204,18 @@ void _showYearBottomSheet(context){
 }
 
 void _showSubjectBottomSheet(context){
-  int selectedIndex;
+  int selectedIndex = 0;
 
-  const List<Widget> educationLevel = [
-    Text('p1'),
-    Text('p2'),
-    Text('p3'),
-    Text('p4'),
-    Text('p5'),
-    Text('p6'),
-    Text('s1'),
-    Text('s2'),
-    Text('s3'),
-    Text('s4'),
-    Text('s5'),
-    Text('s6'),
+  const List<Text> subjects = [
+    Text('m'),
+    Text('eng'),
+    Text('chi'),
+    Text('ls'),
+    Text('phy'),
+    Text('chem'),
+    Text('bio'),
+    Text('jp'),
+    Text('football'),
   ] ;
 
   showModalBottomSheet(
@@ -253,8 +250,13 @@ void _showSubjectBottomSheet(context){
                       child: Text('Confirm'),
                       onPressed: () {
                         print(selectedIndex);
-                        FilterTeacherAddButtonPressed(
-                            FilterTeacherChip(label: 'musiclabel', description: 'hogehoge')
+                        print(subjects[selectedIndex].data);
+                        Navigator.of(context).pop();
+                        BlocProvider.of<TeacherBloc>(context).add(
+                          FilterTeacherAddButtonPressed(
+                              FilterTeacherChip(label: subjects[selectedIndex].data,
+                                  description: subjects[selectedIndex].data)
+                          ),
                         );
                       },
                       padding: const EdgeInsets.symmetric(
@@ -272,43 +274,12 @@ void _showSubjectBottomSheet(context){
                     selectedIndex = value;
                   },
                   itemExtent: 30,
-                  children: educationLevel,
+                  children: subjects,
                 ),
               )
             ],
           ),
         );
-
-
-//        return Container(
-//          child:
-//          new Wrap(
-//            children: <Widget>[
-//              new ListTile(
-//                  leading: new Icon(Icons.music_note),
-//                  title: new Text('Music'),
-//                  onTap: () => {
-//                      BlocProvider.of<FilterTeacherBloc>(context).add(
-//                        FilterTeacherButtonPressed(
-//                            FilterTeacherChip(label: 'musiclabel', description: 'hogehoge')
-//                        ),
-//                      )
-//                  }
-//              ),
-//              new ListTile(
-//                  leading: new Icon(Icons.videocam),
-//                  title: new Text('Video'),
-//                  onTap: () => {
-//                     BlocProvider.of<FilterTeacherBloc>(context).add(
-//                      FilterTeacherButtonPressed(
-//                          FilterTeacherChip(label: 'videolabel', description: 'fugafuga')
-//                      ),
-//                    )
-//                  }
-//              ),
-//            ],
-//          ),
-//        );
       }
   );
 }
@@ -388,37 +359,6 @@ void _showAreaBottomSheet(context){
             ],
           ),
         );
-
-
-//        return Container(
-//          child:
-//          new Wrap(
-//            children: <Widget>[
-//              new ListTile(
-//                  leading: new Icon(Icons.music_note),
-//                  title: new Text('Music'),
-//                  onTap: () => {
-//                      BlocProvider.of<FilterTeacherBloc>(context).add(
-//                        FilterTeacherButtonPressed(
-//                            FilterTeacherChip(label: 'musiclabel', description: 'hogehoge')
-//                        ),
-//                      )
-//                  }
-//              ),
-//              new ListTile(
-//                  leading: new Icon(Icons.videocam),
-//                  title: new Text('Video'),
-//                  onTap: () => {
-//                     BlocProvider.of<FilterTeacherBloc>(context).add(
-//                      FilterTeacherButtonPressed(
-//                          FilterTeacherChip(label: 'videolabel', description: 'fugafuga')
-//                      ),
-//                    )
-//                  }
-//              ),
-//            ],
-//          ),
-//        );
       }
   );
 }
