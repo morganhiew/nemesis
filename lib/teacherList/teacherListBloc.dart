@@ -107,91 +107,34 @@ class TeacherBloc extends Bloc<TeacherEvent, TeacherState> {
     print(lastDoc);
     print(limit);
     List<String> currentChipLabels = [];
-    if (currentChips != null)
+    if (currentChips != null) {
       currentChipLabels = currentChips.map((f) => f.label).toList();
+    }
     print(currentChipLabels);
-    CollectionReference ref = Firestore.instance.collection('teachers');
+    Query query = Firestore.instance.collection('teachers');
     List<Teacher> resList = [];
     DocumentSnapshot lastDocReturn;
-    if (currentChipLabels.length > 0) {
-      if (lastDoc != null) {
-        var res = await ref
-            .where('subjects', arrayContainsAny: currentChipLabels)
-            .orderBy('name')
-            .startAfterDocument(lastDoc)
-            .limit(limit)
-            .getDocuments()
-            .then((querySnapshot) {
-          querySnapshot.documents.forEach((result) {
-            print('RESULT!');
-            lastDocReturn = result;
-            print(result.data);
-            resList.add(Teacher(
-                id: result.documentID,
-                name: result.data['name'],
-                description: result.data['description'],
-                liked: false));
-          });
-        });
-      } else {
-        var res = await ref
-            .where('subjects', arrayContainsAny: currentChipLabels)
-            .orderBy('name')
-            .limit(limit)
-            .getDocuments()
-            .then((querySnapshot) {
-          querySnapshot.documents.forEach((result) {
-            print('RESULT!');
-            lastDocReturn = result;
-            print(result.data);
-            resList.add(Teacher(
-                id: result.documentID,
-                name: result.data['name'],
-                description: result.data['description'],
-                liked: false));
-          });
-        });
-      }
-    } else {
-      if (lastDoc != null) {
-        var res = await ref
-            .orderBy('name')
-            .startAfterDocument(lastDoc)
-            .limit(limit)
-            .getDocuments()
-            .then((querySnapshot) {
-          querySnapshot.documents.forEach((result) {
-            print('RESULT!');
-            print(result.documentID);
-            lastDocReturn = result;
-            print(result.data);
-            resList.add(Teacher(
-                id: result.documentID,
-                name: result.data['name'],
-                description: result.data['description'],
-                liked: false));
-          });
-        });
-      } else {
-        var res = await ref
-            .orderBy('name')
-            .limit(limit)
-            .getDocuments()
-            .then((querySnapshot) {
-          querySnapshot.documents.forEach((result) {
-            print('RESULT!');
-            print(result.documentID);
-            lastDocReturn = result;
-            print(result.data);
-            resList.add(Teacher(
-                id: result.documentID,
-                name: result.data['name'],
-                description: result.data['description'],
-                liked: false));
-          });
-        });
-      }
+    currentChipLabels.forEach((currentChipLabel) {
+      query = query.where('subjects', arrayContains: currentChipLabel);
+    });
+    query = query.orderBy('name');
+    if (lastDoc != null) {
+      query = query.startAfterDocument(lastDoc);
     }
+    var res = await query.limit(limit)
+        .getDocuments()
+        .then((querySnapshot) {
+      querySnapshot.documents.forEach((result) {
+        print('RESULT!');
+        lastDocReturn = result;
+        print(result.data);
+        resList.add(Teacher(
+            id: result.documentID,
+            name: result.data['name'],
+            description: result.data['description'],
+            liked: false));
+      });
+    });
     print(resList);
     return [lastDocReturn, resList];
   }
