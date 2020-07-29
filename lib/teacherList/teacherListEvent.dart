@@ -1,6 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:nemesis/teacherList/teacherListState.dart';
 
+import 'filterTeacherChipClass.dart';
+
 abstract class TeacherEvent {
   @override
   List<Object> get props => [];

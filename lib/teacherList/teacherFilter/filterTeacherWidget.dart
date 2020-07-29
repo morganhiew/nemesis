@@ -6,6 +6,8 @@ import 'package:nemesis/teacherList/teacherListBloc.dart';
 import 'package:nemesis/teacherList/teacherListEvent.dart';
 import 'package:nemesis/teacherList/teacherListState.dart';
 
+import '../filterTeacherChipClass.dart';
+
 Widget FilterTeacherWidget(BuildContext context) {
   final _teacherBlocInstance = BlocProvider.of<TeacherBloc>(context);
   return Column(
@@ -173,7 +175,7 @@ void _showYearBottomSheet(context){
                         Navigator.of(context).pop();
                         BlocProvider.of<TeacherBloc>(context).add(
                             FilterTeacherAddButtonPressed(
-                                FilterTeacherChip(label: educationLevel[selectedIndex].data,
+                                FilterTeacherYearChip(year: selectedIndex + 1,label: educationLevel[selectedIndex].data,
                                     description: educationLevel[selectedIndex].data)
                             ),
                         );
@@ -254,7 +256,7 @@ void _showSubjectBottomSheet(context){
                         Navigator.of(context).pop();
                         BlocProvider.of<TeacherBloc>(context).add(
                           FilterTeacherAddButtonPressed(
-                              FilterTeacherChip(label: subjects[selectedIndex].data,
+                              FilterTeacherChip(category: Category.subject,label: subjects[selectedIndex].data,
                                   description: subjects[selectedIndex].data)
                           ),
                         );
@@ -335,7 +337,7 @@ void _showAreaBottomSheet(context){
                       onPressed: () {
                         print(selectedIndex);
                         FilterTeacherAddButtonPressed(
-                            FilterTeacherChip(label: 'musiclabel', description: 'hogehoge')
+                            FilterTeacherChip(category: Category.area ,label: 'musiclabel', description: 'hogehoge')
                         );
                       },
                       padding: const EdgeInsets.symmetric(

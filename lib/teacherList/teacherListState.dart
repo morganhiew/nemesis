@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:nemesis/teacherList/teacherClass.dart';
 
+import 'filterTeacherChipClass.dart';
+
 class TeacherState {
   final List<FilterTeacherChip> filterTeacherChips;
   const TeacherState(this.filterTeacherChips);
@@ -46,9 +48,4 @@ class TeacherSuccess extends TeacherState {
 }
 
 
-class FilterTeacherChip {
-  final String label;
-  final String description;
 
-  const FilterTeacherChip ({this.label, this.description});
-}

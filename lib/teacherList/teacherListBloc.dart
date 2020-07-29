@@ -6,6 +6,8 @@ import 'package:nemesis/teacherList/teacherClass.dart';
 import 'package:nemesis/teacherList/teacherListEvent.dart';
 import 'package:nemesis/teacherList/teacherListState.dart';
 
+import 'filterTeacherChipClass.dart';
+
 class TeacherBloc extends Bloc<TeacherEvent, TeacherState> {
   TeacherBloc() : super(TeacherInitial(filterTeacherChips: []));
 
@@ -53,11 +55,12 @@ class TeacherBloc extends Bloc<TeacherEvent, TeacherState> {
           final result = await _fetchPosts(null, 6, currentChips);
           final lastDoc = result[0];
           final teachers = result[1];
+          final teachersLength = teachers != null ? teachers.length : 0;
           yield TeacherSuccess(
               filterTeacherChips: currentChips,
               teachers: teachers,
               lastDoc: lastDoc,
-              hasReachedMax: false);
+              hasReachedMax: teachersLength < 6 ? true: false);
         } else if (currentState is TeacherSuccess) {
           final result =
               await _fetchPosts(currentState.lastDoc, 6, currentChips);
@@ -85,10 +88,11 @@ class TeacherBloc extends Bloc<TeacherEvent, TeacherState> {
         final result = await _fetchPosts(null, 6, currentChips);
         final lastDoc = result[0];
         final teachers = result[1];
+        final teachersLength = teachers != null ? teachers.length : 0;
         yield TeacherSuccess(
             filterTeacherChips: currentChips,
             teachers: teachers,
-            hasReachedMax: false,
+            hasReachedMax: teachersLength < 6 ? true: false,
             lastDoc: lastDoc);
       } catch (e) {
         print('ERROR!!!!!!!!!');
@@ -106,22 +110,44 @@ class TeacherBloc extends Bloc<TeacherEvent, TeacherState> {
     print('fetch from firebase');
     print(lastDoc);
     print(limit);
-    List<String> currentChipLabels = [];
+    List<String> currentSubjectChipLabels = [];
+    int currentYear;
+    List<String> currentAreaChipLabels = [];
     if (currentChips != null) {
-      currentChipLabels = currentChips.map((f) => f.label).toList();
+      for (var i = 0; i < currentChips.length; i++) {
+        FilterTeacherChip currentChip = currentChips[i];
+        print('iterating chips: ' + currentChip.label.toString());
+        if (currentChip.category == Category.year) {
+          if (currentChip is FilterTeacherYearChip) {
+            currentYear = currentChip.year;
+          }
+        }
+        if (currentChip.category == Category.subject) {
+          currentSubjectChipLabels.add(currentChip.label);
+        }
+        if (currentChip.category == Category.area) {
+          currentSubjectChipLabels.add(currentChip.label);
+        }
+      }
     }
-    print(currentChipLabels);
+    print(currentSubjectChipLabels);
     Query query = Firestore.instance.collection('teachers');
     List<Teacher> resList = [];
     DocumentSnapshot lastDocReturn;
-    currentChipLabels.forEach((currentChipLabel) {
-      query = query.where('subjects', arrayContains: currentChipLabel);
+    currentSubjectChipLabels.forEach((currentChipLabel) {
+      query = query.where('subjects.'+currentChipLabel, isEqualTo: true);
     });
-    query = query.orderBy('name');
+    if (currentYear != null) {
+      query = query.where('service_range', arrayContains: currentYear);
+    }
+    if (currentAreaChipLabels.length > 0) {
+      query = query.where('service_area', arrayContainsAny: currentAreaChipLabels);
+    }
+    query = query.orderBy('last_login', descending: true);
     if (lastDoc != null) {
       query = query.startAfterDocument(lastDoc);
     }
-    var res = await query.limit(limit)
+    await query.limit(limit)
         .getDocuments()
         .then((querySnapshot) {
       querySnapshot.documents.forEach((result) {

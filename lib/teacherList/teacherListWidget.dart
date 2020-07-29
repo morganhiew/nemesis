@@ -55,7 +55,8 @@ Widget TeacherListWidget(context) {
                   : state.teachers.length + 1,
               controller: _scrollController,
               itemBuilder: (BuildContext context, int index) {
-                return index >= state.teachers.length
+                print('listview builder index: ' + index.toString());
+                return index >= state.teachers.length && !state.hasReachedMax
                     ? BottomLoader()
                     : makeCard(teacher: state.teachers[index]);
               },
