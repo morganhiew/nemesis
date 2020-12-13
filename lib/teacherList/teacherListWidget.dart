@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nemesis/teacherList/teacherClass.dart';
-import 'package:nemesis/teacherList/teacherListBloc.dart';
-import 'package:nemesis/teacherList/teacherListEvent.dart';
-import 'package:nemesis/teacherList/teacherListState.dart';
+import 'package:nemesis/teacherList/teacherBloc.dart';
+import 'package:nemesis/teacherList/teacherEvent.dart';
+import 'package:nemesis/teacherList/teacherState.dart';
 
 // Define a custom Form widget.
 Widget TeacherListWidget(context) {

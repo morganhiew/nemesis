@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:nemesis/teacherList/teacherListState.dart';
+import 'package:nemesis/teacherList/teacherState.dart';
 
 import 'filterTeacherChipClass.dart';
 
