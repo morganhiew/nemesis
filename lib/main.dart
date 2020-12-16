@@ -12,7 +12,7 @@ import 'package:nemesis/user/user_repository.dart';
 
 import 'authentication/authentication_state.dart';
 import 'home_widget.dart';
-import 'login/login_page.dart';
+import 'login/login_screen.dart';
 import 'loading/loading_indicator.dart';
 
 void main() => runApp(
@@ -27,29 +27,48 @@ class _MyAppState extends State<MyApp> {
   final UserRepository _userRepository = UserRepository();
   AuthenticationBloc _authenticationBloc;
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   print('init state');
-  //   _authenticationBloc = AuthenticationBloc(userRepository: _userRepository);
-  //   _authenticationBloc.add(AppStarted());
-  // }
+  @override
+  void initState() {
+    super.initState();
+    print('init state');
+    _authenticationBloc = AuthenticationBloc(userRepository: _userRepository);
+    _authenticationBloc.add(AppStarted());
+  }
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      lazy: false,
-      create: (BuildContext context) => AuthenticationBloc(userRepository: _userRepository)..add(AppStarted()),
-      child: MaterialApp(
-        home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
-          // bloc: _authenticationBloc,
-          builder: (context, state) {
-            print('hi'+ state.toString());
-            if (state is Uninitialized) {
-              return SplashPage();
-            }
-            return Container();
-          },
+    return MaterialApp(
+      theme: ThemeData(
+        brightness: Brightness.dark,
+        primaryColor: Colors.lightBlue[800],
+        accentColor: Colors.cyan[600],
+        fontFamily: 'Georgia',
+        textTheme: TextTheme(
+          headline1: TextStyle(fontSize: 72.0, fontWeight: FontWeight.bold),
+          headline6: TextStyle(fontSize: 36.0, fontStyle: FontStyle.italic),
+          bodyText2: TextStyle(fontSize: 14.0, fontFamily: 'Hind'),
+        ),
+      ),
+      home: BlocProvider(
+        lazy: false,
+        create: (BuildContext context) => AuthenticationBloc(userRepository: _userRepository),
+        child: MaterialApp(
+          home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+            cubit: _authenticationBloc,
+            // ignore: missing_return
+            builder: (context, state) {
+              print('hi'+ state.toString());
+              if (state is Uninitialized) {
+                return SplashPage();
+              }
+              if (state is Unauthenticated) {
+                return LoginScreen(userRepository: _userRepository,);
+              }
+              if (state is Authenticated) {
+                return Home();
+              }
+            },
+          ),
         ),
       ),
     );

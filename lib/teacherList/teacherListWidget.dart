@@ -25,7 +25,7 @@ Widget TeacherListWidget(context) {
   return Scaffold (
       body:
       BlocBuilder<TeacherBloc, TeacherState> (
-        bloc: _teacherBlocInstance..add(TeacherFetched()),
+        cubit: _teacherBlocInstance..add(TeacherFetched()),
         // ignore: missing_return
         builder: (context, state) {
           if (state is TeacherInitial) {

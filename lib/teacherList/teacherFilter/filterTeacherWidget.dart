@@ -41,7 +41,7 @@ Widget FilterTeacherWidget(BuildContext context) {
           ),
           child:
           BlocBuilder<TeacherBloc, TeacherState>(
-            bloc: _teacherBlocInstance,
+            cubit: _teacherBlocInstance,
             builder: (context, state) {
               int _itemCount = state.filterTeacherChips != null ? state.filterTeacherChips.length : 0;
               print('_itemcount ' + _itemCount.toString());
