@@ -1,37 +1,69 @@
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nemesis/myInfo/my_info_widget.dart';
 import 'package:nemesis/placeholder_widget.dart';
+import 'package:nemesis/settings/settings_widget.dart';
 import 'package:nemesis/teacherList/teacherBloc.dart';
 import 'package:nemesis/teacherList/teacherListPage.dart';
 
+import 'authentication/bloc/authentication_bloc.dart';
+
+class HomePage extends StatelessWidget {
+  final User user;
+  final AuthenticationRepository authenticationRepository;
+  const HomePage({Key key, this.user, this.authenticationRepository}) : super(key: key);
+
+
+  static Route route(user) {
+    return MaterialPageRoute<void>(builder: (_) => HomePage(user: user));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+
+    print('testing' + authenticationRepository.toString());
+    // final textTheme = Theme.of(context).textTheme;
+    // final user = context.select((AuthenticationBloc bloc) => bloc.state.user);
+    return Home(user: user, authenticationRepository: authenticationRepository);
+  }
+}
+
 class Home extends StatefulWidget {
+  final User user;
+  final AuthenticationRepository authenticationRepository;
+  const Home({Key key, this.user, this.authenticationRepository}) : super(key: key);
+
+
   @override
   State<StatefulWidget> createState() {
-    return _HomeState();
+    return _HomeState(user: user, authenticationRepository: authenticationRepository);
   }
 }
 
 class _HomeState extends State<Home> {
-  int _currentIndex = 1;
+  int _currentIndex = 2;
   PageController _pageController;
+  final User user;
+  final AuthenticationRepository authenticationRepository;
+  _HomeState({this.user, this.authenticationRepository});
 
-  final List<Widget> _children = [
+  List<Widget> _children = [
     MyInfoWidget(),
     PlaceholderWidget(Colors.black),
     TeacherListWrapper(),
     PlaceholderWidget(Colors.transparent),
     PlaceholderWidget(Colors.blue),
-    PlaceholderWidget(Colors.green),
-    PlaceholderWidget(Colors.red),
+    PlaceholderWidget(Colors.green)
   ];
-
 
 
   @override
   void initState() {
     super.initState();
-    _pageController = PageController(initialPage: 1);
+    _pageController = PageController(initialPage: 2);
+    _children[0] = MyInfoWidget(user: user);
+    _children[5] = SettingsWidget(authenticationRepository: authenticationRepository);
   }
 
   @override
@@ -62,9 +94,10 @@ class _HomeState extends State<Home> {
             fit: BoxFit.cover,
           ),
         ), child: Scaffold(
+        resizeToAvoidBottomInset: false,
           backgroundColor: Colors.transparent,
           appBar: AppBar(
-            title: Text('PP Tutor', style: TextStyle(color: Colors.black, fontSize: 24, fontWeight: FontWeight.bold),),
+            title: Text('家庭教師マッチングアプリ', style: TextStyle(color: Colors.black, fontSize: 24, fontWeight: FontWeight.bold),),
                       backgroundColor: Colors.white,
             elevation: 0,
           ),
@@ -85,23 +118,23 @@ class _HomeState extends State<Home> {
             items: [
               BottomNavigationBarItem(
                 icon: new Icon(Icons.person),
-                title: new Text('個人資訊'),
+                title: new Text('個人情報'),
               ),
               BottomNavigationBarItem(
                 icon: new Icon(Icons.add_comment),
-                title: new Text('我的條件'),
+                title: new Text('検索条件'),
               ),
               BottomNavigationBarItem(
                 icon: new Icon(Icons.search),
-                title: new Text('導師搜尋'),
+                title: new Text('教師検索'),
               ),
               BottomNavigationBarItem(
                 icon: new Icon(Icons.favorite),
-                title: new Text('已關注導師'),
+                title: new Text('気に入り'),
               ),
               BottomNavigationBarItem(
                 icon: new Icon(Icons.compare_arrows),
-                title: new Text('導師配對'),
+                title: new Text('マッチング'),
               ),
               BottomNavigationBarItem(
                   icon: Icon(Icons.settings),

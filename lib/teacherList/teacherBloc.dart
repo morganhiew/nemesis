@@ -134,7 +134,7 @@ class TeacherBloc extends Bloc<TeacherEvent, TeacherState> {
       }
     }
     print(currentSubjectChipLabels);
-    Query query = Firestore.instance.collection('teachers');
+    Query query = FirebaseFirestore.instance.collection('teachers');
     List<Teacher> resList = [];
     DocumentSnapshot lastDocReturn;
     currentSubjectChipLabels.forEach((currentChipLabel) {
@@ -151,16 +151,16 @@ class TeacherBloc extends Bloc<TeacherEvent, TeacherState> {
       query = query.startAfterDocument(lastDoc);
     }
     await query.limit(limit)
-        .getDocuments()
+        .get()
         .then((querySnapshot) {
-      querySnapshot.documents.forEach((result) {
+      querySnapshot.docs.forEach((result) {
         print('RESULT!');
         lastDocReturn = result;
         print(result.data);
         resList.add(Teacher(
-            id: result.documentID,
-            name: result.data['name'],
-            description: result.data['description'],
+            id: result.id,
+            name: result['name'],
+            description: result['description'],
             liked: false));
       });
     });

@@ -18,11 +18,6 @@ class FilterTeacherAddButtonPressed extends TeacherEvent {
   @override
   List<Object> get props => [chip];
 
-  @override
-  String toString() {
-    'FilterTeacherAddButtonPressed { chip: $chip}';
-  }
-
 }
 
 
@@ -33,10 +28,5 @@ class FilterTeacherDeleteButtonPressed extends TeacherEvent {
 
   @override
   List<Object> get props => [chip];
-
-  @override
-  String toString() {
-    'FilterTeacherDeleteButtonPressed { chip: $chip}';
-  }
 
 }

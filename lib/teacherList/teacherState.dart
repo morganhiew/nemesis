@@ -4,20 +4,28 @@ import 'package:nemesis/teacherList/teacherClass.dart';
 
 import 'filterTeacherChipClass.dart';
 
-class TeacherState {
+class TeacherState extends Equatable{
   final List<FilterTeacherChip> filterTeacherChips;
   const TeacherState(this.filterTeacherChips);
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [filterTeacherChips];
 }
 
 class TeacherInitial extends TeacherState {
   TeacherInitial({List<FilterTeacherChip> filterTeacherChips}) : super(filterTeacherChips);
+
+  @override
+  String toString() =>
+      'TeacherInitial';
 }
 
 class TeacherFailure extends TeacherState {
   TeacherFailure({List<FilterTeacherChip> filterTeacherChips}) : super(filterTeacherChips);
+
+  @override
+  String toString() =>
+      'TeacherFailure';
 }
 
 class TeacherSuccess extends TeacherState {
