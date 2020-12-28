@@ -13,23 +13,25 @@ class SignUpForm extends StatelessWidget {
           Scaffold.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
-              const SnackBar(content: Text('Sign Up Failure')),
+              const SnackBar(content: Text('アカウント作成失敗')),
             );
         }
       },
       child: Align(
         alignment: const Alignment(0, -1 / 3),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            _EmailInput(),
-            const SizedBox(height: 8.0),
-            _PasswordInput(),
-            const SizedBox(height: 8.0),
-            _ConfirmPasswordInput(),
-            const SizedBox(height: 8.0),
-            _SignUpButton(),
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _EmailInput(),
+              const SizedBox(height: 8.0),
+              _PasswordInput(),
+              const SizedBox(height: 8.0),
+              _ConfirmPasswordInput(),
+              const SizedBox(height: 8.0),
+              _SignUpButton(),
+            ],
+          ),
         ),
       ),
     );
@@ -47,9 +49,9 @@ class _EmailInput extends StatelessWidget {
           onChanged: (email) => context.read<SignUpCubit>().emailChanged(email),
           keyboardType: TextInputType.emailAddress,
           decoration: InputDecoration(
-            labelText: 'email',
+            labelText: 'メール',
             helperText: '',
-            errorText: state.email.invalid ? 'invalid email' : null,
+            errorText: state.email.invalid ? 'メール格式不正' : null,
           ),
         );
       },
@@ -69,9 +71,9 @@ class _PasswordInput extends StatelessWidget {
               context.read<SignUpCubit>().passwordChanged(password),
           obscureText: true,
           decoration: InputDecoration(
-            labelText: 'password',
+            labelText: 'パスワード',
             helperText: '',
-            errorText: state.password.invalid ? 'invalid password' : null,
+            errorText: state.password.invalid ? 'パスワード格式不正' : null,
           ),
         );
       },
@@ -94,10 +96,10 @@ class _ConfirmPasswordInput extends StatelessWidget {
               .confirmedPasswordChanged(confirmPassword),
           obscureText: true,
           decoration: InputDecoration(
-            labelText: 'confirm password',
+            labelText: 'パスワード確認',
             helperText: '',
             errorText: state.confirmedPassword.invalid
-                ? 'passwords do not match'
+                ? 'パスワード不一致'
                 : null,
           ),
         );
@@ -116,7 +118,7 @@ class _SignUpButton extends StatelessWidget {
             ? const CircularProgressIndicator()
             : RaisedButton(
           key: const Key('signUpForm_continue_raisedButton'),
-          child: const Text('SIGN UP'),
+          child: const Text('新規登録'),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(30.0),
           ),

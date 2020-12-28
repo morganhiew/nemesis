@@ -15,7 +15,7 @@ Widget FilterTeacherWidget(BuildContext context) {
       Row(
         children: <Widget>[
           RaisedButton(
-            child: Text("年級"),
+            child: Text("学年"),
             onPressed: () {
               _showYearBottomSheet(context);
             },
@@ -26,12 +26,12 @@ Widget FilterTeacherWidget(BuildContext context) {
               _showSubjectBottomSheet(context);
             },
           ),
-          RaisedButton(
-            child: Text("地區"),
-            onPressed: () {
-              _showAreaBottomSheet(context);
-            },
-          ),
+          // RaisedButton(
+          //   child: Text("地區"),
+          //   onPressed: () {
+          //     _showAreaBottomSheet(context);
+          //   },
+          // ),
         ],
       ),
       Container(
@@ -125,18 +125,18 @@ void _showYearBottomSheet(context){
   int selectedIndex = 0;
 
   const List<Text> educationLevel = [
-    Text('p1'),
-    Text('p2'),
-    Text('p3'),
-    Text('p4'),
-    Text('p5'),
-    Text('p6'),
-    Text('s1'),
-    Text('s2'),
-    Text('s3'),
-    Text('s4'),
-    Text('s5'),
-    Text('s6'),
+    Text('小１'),
+    Text('小２'),
+    Text('小３'),
+    Text('小４'),
+    Text('小５'),
+    Text('小６'),
+    Text('中１'),
+    Text('中２'),
+    Text('中３'),
+    Text('高１'),
+    Text('高２'),
+    Text('高３'),
   ] ;
 
   showModalBottomSheet(
@@ -160,15 +160,17 @@ void _showYearBottomSheet(context){
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     CupertinoButton(
-                      child: Text('Cancel'),
-                      onPressed: () {},
+                      child: Text('キャンセル'),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
                       padding: const EdgeInsets.symmetric(
                         horizontal: 16.0,
                         vertical: 5.0,
                       ),
                     ),
                     CupertinoButton(
-                      child: Text('Confirm'),
+                      child: Text('次へ'),
                       onPressed: () {
                         print(selectedIndex);
                         print(educationLevel[selectedIndex].data);
@@ -241,15 +243,17 @@ void _showSubjectBottomSheet(context){
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     CupertinoButton(
-                      child: Text('Cancel'),
-                      onPressed: () {},
+                      child: Text('キャンセル'),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
                       padding: const EdgeInsets.symmetric(
                         horizontal: 16.0,
                         vertical: 5.0,
                       ),
                     ),
                     CupertinoButton(
-                      child: Text('Confirm'),
+                      child: Text('次へ'),
                       onPressed: () {
                         print(selectedIndex);
                         print(subjects[selectedIndex].data);
@@ -290,18 +294,7 @@ void _showAreaBottomSheet(context){
   int selectedIndex;
 
   const List<Widget> educationLevel = [
-    Text('p1'),
-    Text('p2'),
-    Text('p3'),
-    Text('p4'),
-    Text('p5'),
-    Text('p6'),
-    Text('s1'),
-    Text('s2'),
-    Text('s3'),
-    Text('s4'),
-    Text('s5'),
-    Text('s6'),
+
   ] ;
 
   showModalBottomSheet(

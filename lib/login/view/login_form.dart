@@ -24,18 +24,21 @@ class LoginForm extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Image.asset(
-                'assets/images/nier.png',
-                height: 120,
+              IconButton (
+                icon: FaIcon(FontAwesomeIcons.user)
               ),
+              // Image.asset(
+              //   FontAwesomeIcons.user,
+              //   height: 120,
+              // ),
               const SizedBox(height: 16.0),
               _EmailInput(),
               const SizedBox(height: 8.0),
               _PasswordInput(),
               const SizedBox(height: 8.0),
               _LoginButton(),
-              const SizedBox(height: 8.0),
-              _GoogleLoginButton(),
+              // const SizedBox(height: 8.0),
+              // _GoogleLoginButton(),
               const SizedBox(height: 4.0),
               _SignUpButton(),
             ],
@@ -57,7 +60,7 @@ class _EmailInput extends StatelessWidget {
           onChanged: (email) => context.read<LoginCubit>().emailChanged(email),
           keyboardType: TextInputType.emailAddress,
           decoration: InputDecoration(
-            labelText: 'email',
+            labelText: 'メール',
             helperText: '',
             errorText: state.email.invalid ? 'invalid email' : null,
           ),
@@ -79,7 +82,7 @@ class _PasswordInput extends StatelessWidget {
               context.read<LoginCubit>().passwordChanged(password),
           obscureText: true,
           decoration: InputDecoration(
-            labelText: 'password',
+            labelText: 'パスワード',
             helperText: '',
             errorText: state.password.invalid ? 'invalid password' : null,
           ),
@@ -99,11 +102,11 @@ class _LoginButton extends StatelessWidget {
             ? const CircularProgressIndicator()
             : RaisedButton(
           key: const Key('loginForm_continue_raisedButton'),
-          child: const Text('LOGIN'),
+          child: const Text('ログイン'),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(30.0),
           ),
-          color: const Color(0xFFFFD600),
+          color: Colors.grey,
           onPressed: state.status.isValidated
               ? () => context.read<LoginCubit>().logInWithCredentials()
               : null,
@@ -120,12 +123,12 @@ class _GoogleLoginButton extends StatelessWidget {
     return RaisedButton.icon(
       key: const Key('loginForm_googleLogin_raisedButton'),
       label: const Text(
-        'SIGN IN WITH GOOGLE',
+        'グーグルで登録',
         style: TextStyle(color: Colors.white),
       ),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
       icon: const Icon(FontAwesomeIcons.google, color: Colors.white),
-      color: theme.accentColor,
+      color: theme.primaryColor,
       onPressed: () => context.read<LoginCubit>().logInWithGoogle(),
     );
   }
@@ -138,7 +141,7 @@ class _SignUpButton extends StatelessWidget {
     return FlatButton(
       key: const Key('loginForm_createAccount_flatButton'),
       child: Text(
-        'CREATE ACCOUNT',
+        'アカウント作成',
         style: TextStyle(color: theme.primaryColor),
       ),
       onPressed: () => Navigator.of(context).push<void>(SignUpPage.route()),

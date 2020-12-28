@@ -97,8 +97,8 @@ class _HomeState extends State<Home> {
         resizeToAvoidBottomInset: false,
           backgroundColor: Colors.transparent,
           appBar: AppBar(
-            title: Text('家庭教師マッチングアプリ', style: TextStyle(color: Colors.black, fontSize: 24, fontWeight: FontWeight.bold),),
-                      backgroundColor: Colors.white,
+            title: Text('家庭教師マッチングアプリ',),
+                      backgroundColor: Colors.blueGrey,
             elevation: 0,
           ),
           body: SizedBox.expand(
